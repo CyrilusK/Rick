@@ -57,19 +57,17 @@ final class CharacterCell: UITableViewCell {
     }
         
     private func locationLabelSetup() {
-        locationLabel.font = UIFont.systemFont(ofSize: 14)
-        locationLabel.textColor = .darkGray
+        locationLabel.font = UIFont.systemFont(ofSize: K.sizeFontLocationLabel)
+        locationLabel.textColor = K.colorFontLocationLabel
     }
         
     private func statusLabelSetup() {
-        statusLabel.font = UIFont.boldSystemFont(ofSize: 14)
-        statusLabel.textColor = .gray
+        statusLabel.font = UIFont.boldSystemFont(ofSize: K.sizeFontStatusLabel)
         statusLabel.textAlignment = .center
-        statusLabel.layer.cornerRadius = 13
+        statusLabel.layer.cornerRadius = K.radiusStatusLabel / 2
         statusLabel.layer.masksToBounds = true
-        statusLabel.backgroundColor = .clear
-        statusLabel.heightAnchor.constraint(equalToConstant: 25).isActive = true
-        statusLabel.widthAnchor.constraint(equalToConstant: 55).isActive = true
+        statusLabel.heightAnchor.constraint(equalToConstant: K.sizeHeightStatusLabel).isActive = true
+        statusLabel.widthAnchor.constraint(equalToConstant: K.aliveSizeWidthStatusLabel).isActive = true
     }
         
     private func watchButtonSetup() {
@@ -87,16 +85,14 @@ final class CharacterCell: UITableViewCell {
         let nameAndStatusStackView = UIStackView(arrangedSubviews: [nameLabel, statusLabel])
         nameAndStatusStackView.axis = .horizontal
         nameAndStatusStackView.distribution = .fillProportionally
-        nameAndStatusStackView.spacing = 10
         
         let watchButtonStackView = UIStackView(arrangedSubviews: [watchButton, UIView()])
         nameAndStatusStackView.axis = .horizontal
         nameAndStatusStackView.distribution = .fillProportionally
-        nameAndStatusStackView.spacing = 10
         
-        let locationImage = UIImageView(image: UIImage(named: "location"))
+        let locationImage = UIImageView(image: UIImage(named: K.locationNameImage))
         locationImage.contentMode = .scaleAspectFit
-        locationImage.widthAnchor.constraint(equalToConstant: 12).isActive = true
+        locationImage.widthAnchor.constraint(equalToConstant: K.sizeWidthImageLocation).isActive = true
         let locationWithImageStackView = UIStackView(arrangedSubviews: [locationImage, locationLabel])
         locationWithImageStackView.axis = .horizontal
         locationWithImageStackView.distribution = .fillProportionally
@@ -115,25 +111,28 @@ final class CharacterCell: UITableViewCell {
             
             labelsStackView.leadingAnchor.constraint(equalTo: charImageView.trailingAnchor, constant: 10),
             labelsStackView.topAnchor.constraint(equalTo: charImageView.topAnchor),
-            labelsStackView.bottomAnchor.constraint(equalTo: charImageView.bottomAnchor),
+            labelsStackView.bottomAnchor.constraint(equalTo: charImageView.bottomAnchor, constant: 2),
             labelsStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20)
         ])
     }
     
-    private func getStatusAndSizeColor(_ status: String) -> UIColor {
+    private func getStatusAndSizeColor(_ status: String) {
         switch status {
-        case "Alive":
+        case K.alive:
             statusLabel.constraints.last?.isActive = false
-            statusLabel.widthAnchor.constraint(equalToConstant: 56).isActive = true
-            return .systemGreen
-        case "Dead":
+            statusLabel.widthAnchor.constraint(equalToConstant: K.aliveSizeWidthStatusLabel).isActive = true
+            statusLabel.textColor = K.aliveColorTextStatusLabel
+            statusLabel.backgroundColor = K.aliveColorBackgroundStatusLabel
+        case K.dead:
             statusLabel.constraints.last?.isActive = false
-            statusLabel.widthAnchor.constraint(equalToConstant: 55).isActive = true
-            return .systemRed
+            statusLabel.widthAnchor.constraint(equalToConstant: K.deadSizeWidthStatusLabel).isActive = true
+            statusLabel.textColor = K.deadColorTextStatusLabel
+            statusLabel.backgroundColor = K.deadColorBackgroundStatusLabel
         default:
             statusLabel.constraints.last?.isActive = false
-            statusLabel.widthAnchor.constraint(equalToConstant: 92).isActive = true
-            return .lightGray
+            statusLabel.widthAnchor.constraint(equalToConstant: K.unknownSizeWidthStatusLabel).isActive = true
+            statusLabel.textColor = K.unknownColorTextStatusLabel
+            statusLabel.backgroundColor = K.unknowColorBackgroundStatusLabel
         }
     }
     
@@ -142,21 +141,19 @@ final class CharacterCell: UITableViewCell {
         detailLabel.text = "\(character.species ?? ""), \(character.gender?.lowercased() ?? "")"
         locationLabel.text = character.location?.name
         statusLabel.text = character.status?.uppercased()
-        statusLabel.backgroundColor = getStatusAndSizeColor(character.status ?? "")
-        
-        AF.request(character.image ?? "", method: .get).response { response in
-            switch response.result {
-            case .success(let responseData):
-                DispatchQueue.main.async {
-                    self.charImageView.image = UIImage(data: responseData!, scale: 1)
-                }
-            case .failure(let error):
-                print("error--->",error)
-            }
-        }
+        getStatusAndSizeColor(character.status ?? "")
+    }
+    
+    func setImage(_ image: UIImage) {
+        charImageView.image = image
     }
     
     @objc func didTapWatch() {
-        print("Tapped Watch Button")
+        print("[DEBUG] Tapped Watch Button")
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        charImageView.image = nil
     }
 }

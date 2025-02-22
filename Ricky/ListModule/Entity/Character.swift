@@ -8,8 +8,8 @@
 import UIKit
 
 struct APIResponse: Decodable {
-    let info: Info
-    let results: [Character]
+    let info: Info?
+    let results: [Character]?
 }
 
 struct Info: Decodable {
@@ -37,18 +37,4 @@ struct Character: Decodable {
 struct Location: Decodable {
     let name: String?
     let url: String?
-}
-
-enum CharacterStatus: String {
-    case alive = "Alive"
-    case dead = "Dead"
-    case unknown = "Unknown"
-    
-    var color: UIColor {
-        switch self {
-        case .alive: return UIColor.systemGreen
-        case .dead: return UIColor.systemRed
-        case .unknown: return UIColor.lightGray
-        }
-    }
 }
