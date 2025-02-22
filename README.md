@@ -5,9 +5,7 @@
 - Проект необходимо выложить в открытый доступ на GitHub или любое другое Git-хранилище
 
 ## Примечание
-Для загрузки новых персонажей используйте пагинацию (прокрутите экран вниз)
-
-![Swift](https://img.shields.io/badge/Swift-5.0-orange) ![Xcode](https://img.shields.io/badge/Xcode-16.1-blue) ![iOS](https://img.shields.io/badge/iOS-18.0-green)  
+Для загрузки новых персонажей используйте пагинацию (прокрутите экран вниз)  
 
 ## Технологии  
 - Swift 
@@ -17,3 +15,4 @@
 - async/await
 - Alamofire
 
+![Swift](https://img.shields.io/badge/Swift-5.0-orange) ![Xcode](https://img.shields.io/badge/Xcode-16.1-blue) ![iOS](https://img.shields.io/badge/iOS-18.0-green)
